@@ -46,6 +46,10 @@ def call_llm(prompt: str, model="cohere.command-r-plus-v1:0", temperature=0.7) -
 ###############################################################################
 st.title("Prompt Tester with AWS Bedrock")
 
+#template name
+st.subheader("Template Name")
+template_name = st.text_input("Enter a name for your template", "Template 1")
+
 # Prompt template input
 st.subheader("Prompt Template")
 prompt_template = st.text_area(
@@ -64,8 +68,18 @@ placeholder_json = st.text_area(
 model_name = st.text_input("Model Name (e.g., cohere.command-r-plus-v1:0)", "cohere.command-r-plus-v1:0")
 temperature = st.slider("Temperature", min_value=0.0, max_value=1.0, value=0.7, step=0.1)
 
+if st.button("Save Template"):
+    st.write("Template saved")
+
+
+# sidebar
+with st.sidebar:
+    st.title("Prompt Tester with AWS Bedrock")
+    st.subheader("Prompt Template")
+
+
 # Generate button
-if st.button("Generate"):
+if st.sidebar.button("Generate"):
     # Safely parse JSON
     try:
         placeholders = json.loads(placeholder_json)
@@ -76,8 +90,8 @@ if st.button("Generate"):
         final_prompt = None
 
     if final_prompt:
-        st.write("### Final Prompt:")
-        st.code(final_prompt, language="markdown")
+        st.sidebar.write("### Final Prompt:")
+        st.sidebar.code(final_prompt, language="markdown")
         
         # Call the LLM
         output = call_llm(
@@ -86,5 +100,7 @@ if st.button("Generate"):
             temperature=temperature
         )
         
-        st.write("### Model Output:")
-        st.write(output)
+        st.sidebar.write("### Model Output:")
+        st.sidebar.write(output)
+
+
